@@ -12,6 +12,7 @@
 		:data-type="message.type"
 		:data-command="message.command"
 		:data-from="message.from && message.from.nick"
+		@click="doAction"
 	>
 		<span
 			aria-hidden="true"
@@ -157,12 +158,17 @@ export default defineComponent({
 			return typeof MessageTypes["message-" + props.message.type] !== "undefined";
 		};
 
+		const doAction = () => {
+			console.log("clicked");
+		};
+
 		return {
 			timeFormat,
 			messageTime,
 			messageTimeLocale,
 			messageComponent,
 			isAction,
+			doAction,
 		};
 	},
 });

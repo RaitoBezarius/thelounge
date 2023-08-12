@@ -523,6 +523,10 @@ p {
 	padding: 1px;
 }
 
+#chat .msg:hover {
+	background-color: var(--highlight-bg-color);
+}
+
 #chat .msg-statusmsg,
 #chat .msg-shown-in-active {
 	cursor: help;

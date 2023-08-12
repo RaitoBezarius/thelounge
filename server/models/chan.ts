@@ -44,6 +44,8 @@ class Chan {
 	// TODO: don't force existence, figure out how to make TS infer it.
 	id!: number;
 	messages!: Msg[];
+	// If available, this maps @msgid attributes to Msg local to this channel.
+	serverIdToMessages!: Record<string, Msg>;
 	name!: string;
 	key!: string;
 	topic!: string;
@@ -66,6 +68,7 @@ class Chan {
 		_.defaults(this, attr, {
 			id: 0,
 			messages: [],
+			serverIdToMessages: {},
 			name: "",
 			key: "",
 			topic: "",
@@ -81,6 +84,18 @@ class Chan {
 
 	destroy() {
 		this.dereferencePreviews(this.messages);
+	}
+
+	getMessageByServerId(serverId: string): Msg | undefined {
+		return this.serverIdToMessages[serverId];
+	}
+
+	// Updates an existing message in the window
+	// e.g. new reactions.
+	updateExistingMessage(client: Client, msg: Msg) {
+		const chan = this.id;
+
+		client.emit("updatedMsg", {chan, msg});
 	}
 
 	pushMessage(client: Client, msg: Msg, increasesUnread = false) {
@@ -114,6 +129,10 @@ class Chan {
 			if (msg.highlight) {
 				obj.highlight = ++this.highlight;
 			}
+		}
+
+		if (msg.server_tags && msg.server_tags.msgId) {
+			this.serverIdToMessages[msg.server_tags.msgId] = msg;
 		}
 
 		client.emit("msg", obj);

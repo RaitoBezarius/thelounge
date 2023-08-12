@@ -2,6 +2,7 @@ import Msg, {MessageType} from "../../models/msg";
 import User from "../../models/user";
 import type {IrcEventHandler} from "../../client";
 import {ChanState} from "../../models/chan";
+import {ServerTags} from "../../models/server-tags";
 
 export default <IrcEventHandler>function (irc, network) {
 	const client = this;
@@ -44,6 +45,7 @@ export default <IrcEventHandler>function (irc, network) {
 			account: data.account,
 			type: MessageType.JOIN,
 			self: data.nick === irc.user.nick,
+			server_tags: new ServerTags(data.tags),
 		});
 		chan.pushMessage(client, msg);
 

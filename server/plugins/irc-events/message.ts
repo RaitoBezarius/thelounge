@@ -6,6 +6,7 @@ import {IrcEventHandler} from "../../client";
 import Chan, {ChanType} from "../../models/chan";
 import User from "../../models/user";
 import {ClientTags} from "../../models/client-tags";
+import {ServerTags} from "../../models/server-tags";
 
 const nickRegExp = /(?:\x03[0-9]{1,2}(?:,[0-9]{1,2})?)?([\w[\]\\`^{|}-]+)/g;
 
@@ -139,10 +140,25 @@ export default <IrcEventHandler>function (irc, network) {
 			highlight: highlight,
 			users: [],
 			client_tags: new ClientTags(data.tags),
+			server_tags: new ServerTags(data.tags),
 		});
 
 		if (showInActive) {
 			msg.showInActive = true;
+		}
+
+		if (msg.type === MessageType.TAGMSG) {
+			// If this is a reaction
+			if (msg.client_tags.reaction && msg.client_tags.repliedTo) {
+				let targetMsg = chan.getMessageByServerId(msg.client_tags.repliedTo);
+
+				if (targetMsg) {
+					const reaction = msg.client_tags.reaction;
+					targetMsg.reacts[reaction] = (targetMsg.reacts[reaction] || 0) + 1;
+
+					chan.updateExistingMessage(client, targetMsg);
+				}
+			}
 		}
 
 		// Not all messages have bodies.

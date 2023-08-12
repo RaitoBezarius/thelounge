@@ -2,6 +2,7 @@ import _ from "lodash";
 import {LinkPreview} from "../plugins/irc-events/link";
 import User from "./user";
 import {ClientTags} from "./client-tags";
+import {ServerTags} from "./server-tags";
 
 export type UserInMessage = Partial<User> & {
 	mode: string;
@@ -63,7 +64,9 @@ class Msg {
 	gecos!: string;
 	account!: boolean;
 
+	server_tags!: ServerTags;
 	client_tags!: ClientTags;
+	reacts: Record<string, number> = {};
 
 	// these are all just for error:
 	error!: string;
@@ -99,6 +102,7 @@ class Msg {
 			type: MessageType.MESSAGE,
 			self: false,
 			client_tags: {},
+			server_tags: {},
 		});
 
 		if (this.time) {

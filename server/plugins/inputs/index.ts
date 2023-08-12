@@ -30,7 +30,7 @@ type ExternalPluginCommand = {
 	allowDisconnected?: boolean;
 };
 
-const clientSideCommands = ["/collapse", "/expand", "/search"];
+const clientSideCommands = ["/collapse", "/expand", "/search", "/react"];
 
 const passThroughCommands = [
 	"/as",
@@ -60,6 +60,7 @@ const builtInInputs = [
 	"list",
 	"mode",
 	"msg",
+	"tagmsg",
 	"nick",
 	"notice",
 	"part",

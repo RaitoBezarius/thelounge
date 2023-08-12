@@ -96,6 +96,7 @@ interface ServerToClientEvents {
 	"msg:preview": ({id, chan, preview}: {id: number; chan: number; preview: LinkPreview}) => void;
 	"msg:special": (data: {chan: number; data?: Record<string, any>}) => void;
 	msg: (data: {msg: ClientMessage; chan: number; highlight?: number; unread?: number}) => void;
+	updatedMsg: (data: {msg: ClientMessage; chan: number}) => void;
 
 	init: ({
 		active,

@@ -44,6 +44,7 @@ declare module "irc-framework" {
 		ident: string;
 		nick: string;
 		time?: any;
+		tags: Record<string, string>;
 	}
 	export interface KickEventArgs {
 		kicked: string;

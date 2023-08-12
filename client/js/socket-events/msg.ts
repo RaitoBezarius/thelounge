@@ -17,6 +17,18 @@ try {
 	};
 }
 
+socket.on("updatedMsg", function (update) {
+	const updatedChannel = store.getters.findChannel(update.chan);
+
+	if (!updatedChannel) {
+		return;
+	}
+
+	const channel = updatedChannel.channel;
+
+	console.log("updated message", channel.messages[update.msg.id]);
+});
+
 socket.on("msg", function (data) {
 	const receivingChannel = store.getters.findChannel(data.chan);
 
